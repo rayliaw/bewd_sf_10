@@ -1,4 +1,4 @@
-#Create 3 or more hashes with cars - include 5 keys 
+#Create 3 or more hashes with cars - include 5 keys
   #- brand, model, year, price, electric
 #Create an array of hashes
 #Iterate through the array using the `.each` method
