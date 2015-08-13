@@ -72,7 +72,7 @@ end
 def print_stories(arr)
   count = 1
   arr.each do |story|
-    puts "#{count}. [#{story[:category]}] #{story[:title]} (#{story[:upvotes]})\n"
+    puts "#{count}. [#{story[:category]}] #{story[:title]} (+#{story[:upvotes]})\n"
     count += 1
   end
 end
