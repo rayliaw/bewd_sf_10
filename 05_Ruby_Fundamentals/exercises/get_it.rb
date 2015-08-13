@@ -14,11 +14,65 @@
 require 'rest-client'
 require 'pry'
 require 'json'
+require 'csv'
 
+# Get request to a URL and parsed into JSON
 def connect_to_api(url)
   get_data = RestClient.get(url)
   JSON.parse(get_data)
 end
 
+# Parses Reddit JSON to pull out story's title, category, upvotes returned in a new array
+def parse_json(json)
+  story_array = [ ]
+  children = json["data"]["children"]
+
+  # Loops through children array and pulls out values from an embedded hash for keys
+  children.each do |child|
+    # Create a new hash for key-value pairs: title, upvotes, category
+    story_hash = {
+      title: child["data"]["title"],
+      upvotes: child["data"]["ups"],
+      category: child["data"]["subreddit"]
+    }
+    # Saves to a new story_array
+    story_array.push(story_hash)
+  end
+
+  # Return story_array
+  return story_array
+end
+
+# Prints out Reddit stories
+def print_stories(story)
+  count = 1
+
+  puts "*** REDDIT FRONT PAGE ***"
+  # Iterates through an array printing out each story to a new line: [Category] Title (Upvotes)
+  story.each do |item|
+    puts "#{count}. [#{item[:category]}] #{item[:title]} (+#{item[:upvotes]})\n"
+    count += 1
+  end
+end
+
+# Takes an array and converts it to a CSV using 3 columns: title, category, header
+def save_to_csv(arr)
+  # Writes to 'reddit.csv'
+  CSV.open("reddit.csv", "wb") do |csv|
+    # Create headers
+    csv << [ "Title", "Category", "Upvotes" ]
+    # Create rows
+    arr.each do |item|
+      csv << [ item[:title], item[:category], item[:upvotes] ]
+    end
+  end
+
+  puts "Saved to 'reddit.csv'."
+end
+
+# Initialize
 reddit_url = "http://www.reddit.com/.json"
-connect_to_api(reddit_url)
+reddit_json_response = connect_to_api(reddit_url)
+reddit_stories = parse_json(reddit_json_response)
+print_stories(reddit_stories)
+save_to_csv(reddit_stories)
