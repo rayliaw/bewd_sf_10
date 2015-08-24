@@ -35,6 +35,7 @@ class Robot
     end
   end
 
+  # Make random robots from array of properties
   def self.make_random_robot
     names = ["Kanye", "Pratt", "Curry", "Dre", "Shaq"]
     type = ["Android", "Super-Android"]
@@ -45,7 +46,7 @@ class Robot
     puts "*** #{robot.empathy} #{robot.flying_skills} #{robot.laser_skills}"
   end
 
-  # Instance mehtods
+  # Instance methods
   def empathy
     "I understand how you feel, human." unless self.name == "Kanye"
   end
@@ -60,4 +61,5 @@ class Robot
 
 end
 
+# Initialize
 Robot.make_robots(10)
